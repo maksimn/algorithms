@@ -1,0 +1,5 @@
+D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\bin\Debug\SortingExamples.exe.config
+D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\bin\Debug\SortingExamples.exe
+D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\bin\Debug\SortingExamples.pdb
+D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\obj\Debug\SortingExamples.exe
+D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\obj\Debug\SortingExamples.pdb
