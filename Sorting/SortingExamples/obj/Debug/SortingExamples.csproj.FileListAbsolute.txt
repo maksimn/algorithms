@@ -3,3 +3,4 @@ D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\bin\Debug\Sortin
 D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\bin\Debug\SortingExamples.pdb
 D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\obj\Debug\SortingExamples.exe
 D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\obj\Debug\SortingExamples.pdb
+D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\obj\Debug\SortingExamples.csprojResolveAssemblyReference.cache
