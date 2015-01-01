@@ -6,7 +6,7 @@ static class ArraySortingExtensions {
         int n = a.Length;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n - 1; j++) {
-                if (cmp.Compare(a[j], a[j + 1]) < 0) {
+                if (cmp.Compare(a[j], a[j + 1]) > 0) {
                     Swap(ref a[j], ref a[j + 1]);
                 }
             }
@@ -29,7 +29,7 @@ static class ArraySortingExtensions {
 
 public class IntAscComparer : IComparer<int> {
     public int Compare(int x, int y) {
-        return y - x;
+        return x - y;
     }
 }
 

@@ -4,3 +4,9 @@ D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\bin\Debug\Sortin
 D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\obj\Debug\SortingExamples.exe
 D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\obj\Debug\SortingExamples.pdb
 D:\PrevRabStol\MyProgramming\Algorithms\Sorting\SortingExamples\obj\Debug\SortingExamples.csprojResolveAssemblyReference.cache
+D:\PrevRabStol\MyProgramming\C#\Algorithms\Sorting\SortingExamples\bin\Debug\SortingExamples.exe.config
+D:\PrevRabStol\MyProgramming\C#\Algorithms\Sorting\SortingExamples\obj\Debug\SortingExamples.exe
+D:\PrevRabStol\MyProgramming\C#\Algorithms\Sorting\SortingExamples\obj\Debug\SortingExamples.pdb
+D:\PrevRabStol\MyProgramming\C#\Algorithms\Sorting\SortingExamples\bin\Debug\SortingExamples.exe
+D:\PrevRabStol\MyProgramming\C#\Algorithms\Sorting\SortingExamples\bin\Debug\SortingExamples.pdb
+D:\PrevRabStol\MyProgramming\C#\Algorithms\Sorting\SortingExamples\obj\Debug\SortingExamples.csprojResolveAssemblyReference.cache
