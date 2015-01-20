@@ -57,31 +57,47 @@ public class SuffixAutomaton {
         }
     }
     private Boolean IsAchievableFlag = false;
-    private void OnAchievabilityFound() {
-        IsAchievableFlag = true;
+    private Byte[] colorAttr = null;
+    private void InitColorAttr() {
+        colorAttr = new Byte[Size];
     }
     public void IsAchievableAux(Int32 node, Char d, Char[] other) {
-        if (st[node].next.ContainsKey(d)) {
-            OnAchievabilityFound();
-            return; 
-        } else {
-            foreach (var transition in st[node].next) {
+        // Инициализация:
+        colorAttr[node] = 1;
+        Queue<Int32> queue = new Queue<Int32>();
+        queue.Enqueue(node);
+        // Обход графа в ширину:
+        while (queue.Count != 0) {
+            // Выталкивается текущее серое состояние из начала очереди:
+            Int32 u = queue.Dequeue();
+            // Проверяется, есть ли из него переход по нужному разделителю. Если да, то устанавливаем флаг в тру и прекращаем поиски.
+            if (st[u].next.ContainsKey(d)) {
+                IsAchievableFlag = true;
+                return;
+            }
+            // Смотрим все состояния, смежные с текущим
+            foreach (var state in st[u].next) {
                 Boolean isMarkEqualToOther = false;
                 foreach (var otherDelimiter in other) {
-                    if (transition.Key == otherDelimiter) {
+                    if (state.Key == otherDelimiter) {
                         isMarkEqualToOther = true;
                         break;
                     }
                 }
+                // Если переход происходит не по метке с неподходящим разделителем, то добавляем состояние в очередь.
                 if (isMarkEqualToOther == false) {
-                    IsAchievableAux(transition.Value, d, other);
+                    Int32 v = state.Value;
+                    if (colorAttr[v] == 0) {
+                        colorAttr[v] = 1;
+                        queue.Enqueue(v);
+                    }
                 }
             }
-            return;
+            colorAttr[u] = 2;
         }
-        return;
     }
     public Boolean IsAchievable(Int32 node, Char d, Char[] other) {
+        InitColorAttr();
         IsAchievableFlag = false;
         IsAchievableAux(node, d, other);
         return IsAchievableFlag;
@@ -153,13 +169,15 @@ class Program {
         for (Int32 i = 0; i < n; i++) {
             delim[i] = delimiter[i];
         }
-            for (Int32 i = 0; i < n; i++) {
-                line = Console.ReadLine();
-                for (Int32 j = 0, length = line.Length; j < length; j++) {
-                    sa.Extend(line[j]);
-                }
-                sa.Extend(delimiter[i]);
+        for (Int32 i = 0; i < n; i++) {
+            line = Console.ReadLine();
+            for (Int32 j = 0, length = line.Length; j < length; j++) {
+                sa.Extend(line[j]);
             }
+            sa.Extend(delimiter[i]);
+        }
+            
+//        Console.WriteLine( "Total Memory Consumption {0} bytes.", GC.GetTotalMemory(false)); 
         //sa.Print();
         Console.WriteLine(sa.MaxCommonSubstring(delim));
     }
