@@ -79,25 +79,12 @@ public class SuffixAutomaton {
             }
             return;
         }
+        return;
     }
     public Boolean IsAchievable(Int32 node, Char d, Char[] other) {
-        if (st[node].next.ContainsKey(d)) {
-            return true;
-        } else {
-            foreach (var transition in st[node].next) {
-                Boolean isMarkEqualToOther = false;
-                foreach (var otherDelimiter in other) {
-                    if (transition.Key == otherDelimiter) {
-                        isMarkEqualToOther = true;
-                        break;
-                    }
-                }
-                if (isMarkEqualToOther == false) {
-                    return IsAchievable(transition.Value, d, other);
-                }
-            }
-            return false;
-        }
+        IsAchievableFlag = false;
+        IsAchievableAux(node, d, other);
+        return IsAchievableFlag;
     }
     public Boolean IsAllAchievable(Int32 node, Char[] delimiters) {
         for (Int32 i = 0; i < N; i++) {
@@ -154,7 +141,6 @@ public class SuffixAutomaton {
 
 class Program {
     static void Main(String[] args) {
-/*
         SuffixAutomaton sa = new SuffixAutomaton();
         String line = Console.ReadLine();
         Int32 n = Convert.ToInt32(line);
@@ -176,13 +162,5 @@ class Program {
             }
         //sa.Print();
         Console.WriteLine(sa.MaxCommonSubstring(delim));
- */
-        SuffixAutomaton sa = new SuffixAutomaton();
-        String s = "arrc0zrrv1trrn2";
-        sa.N = 3;
-        for (int i = 0; i < s.Length; i++) {
-            sa.Extend(s[i]);
-        }
-        sa.Print();
     }
 }
