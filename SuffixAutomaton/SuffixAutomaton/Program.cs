@@ -137,7 +137,7 @@ public class SuffixAutomaton {
                         break;
                     }
                 }
-                LongestSubstringBuilder(i);
+                node = i;
             }
         }
     }
