@@ -24,6 +24,27 @@ static class ArraySortingExtensions {
         }
     }
 
+    public static void SelectionSort<T>(this T[] a, IComparer<T> cmp) {
+        for (Int32 i = 0, n = a.Length; i < n - 1; i++) {
+            Int32 ind = i;
+            for (Int32 j = i; j < n; j++) {
+                if (cmp.Compare(a[j], a[ind]) < 0) {
+                    ind = j;
+                }
+            }
+            Swap(ref a[i], ref a[ind]);
+        }
+    }
+
+    public static Boolean SequentialSearch<T>(this T[] a, T val) {
+        foreach (var elem in a) {
+            if (elem.Equals(val)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void Swap<T>(ref T a, ref T b) {
         T t = a;
         a = b;
@@ -51,11 +72,15 @@ public class IntDescComparer : IComparer<Int32> {
 }
 
 class Program {
-    static void Main(string[] args) {
+    static void Main(String[] args) {
         int[] arr = new int[] { 1, 5, 0, 89, 3, 7, 9, 53 };
         arr.BubbleSort(new IntAscComparer());
         arr.ConsolePrint();
         arr.InsertionSort(new IntDescComparer());
         arr.ConsolePrint();
+        arr.SelectionSort(new IntAscComparer());
+        arr.ConsolePrint();
+        Console.WriteLine("Is 5 in arr? : " + arr.SequentialSearch(5));
+        Console.WriteLine("Is 105 in arr? : " + arr.SequentialSearch(105)); 
     }
 }
