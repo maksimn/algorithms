@@ -8,12 +8,15 @@ public class SuffixAutomaton {
         public SortedDictionary<Char, Int32> next = new SortedDictionary<Char, Int32>();
     }
     public Int32 N { get; set; } // число подстрок
-    private List<State> st = new List<State>();
     public Int32 Size { get; set; }
     public Int32 Last { get; set; }
-    public SuffixAutomaton() { 
+    private List<State> st = new List<State>();
+    public Char[] delim;
+    private Boolean IsAchievableFlag = false;
+    private Byte[] colorAttr = null;
+    public SuffixAutomaton() {
         st.Add(new State());
-        Size = 1; 
+        Size = 1;
         Last = 0;
         st[0].len = 0;
         st[0].link = -1;
@@ -28,17 +31,15 @@ public class SuffixAutomaton {
         }
         if (p == -1) {
             st[cur].link = 0;
-        } 
-        else {
+        } else {
             Int32 q = st[p].next[c];
             if (st[p].len + 1 == st[q].len) {
                 st[cur].link = q;
-            } 
-            else {
+            } else {
                 Int32 clone = Size++;
                 st.Add(new State());
                 st[clone].len = st[p].len + 1;
-                st[clone].next = new SortedDictionary<char,int>(st[q].next);
+                st[clone].next = new SortedDictionary<char, int>(st[q].next);
                 st[clone].link = st[q].link;
                 for (; p != -1 && st[p].next.ContainsKey(c) && st[p].next[c] == q; p = st[p].link) {
                     st[p].next[c] = clone;
@@ -56,8 +57,6 @@ public class SuffixAutomaton {
             }
         }
     }
-    private Boolean IsAchievableFlag = false;
-    private Byte[] colorAttr = null;
     private void InitColorAttr() {
         colorAttr = new Byte[Size];
     }
@@ -108,7 +107,7 @@ public class SuffixAutomaton {
             Char[] other = new Char[N - 1];
             for (Int32 k = 0, j = 0; k < N; k++) {
                 if (delimiters[k] != ch) {
-                    other[j++] = delimiters[k]; 
+                    other[j++] = delimiters[k];
                 }
             }
             if (!IsAchievable(node, ch, other)) {
@@ -130,7 +129,7 @@ public class SuffixAutomaton {
     public StringBuilder answer = new StringBuilder();
     public void LongestSubstringBuilder(Int32 node) {
         for (Int32 i = node - 1; i >= 0; i--) {
-            if(st[i].len + 1 == st[node].len && st[i].next.ContainsValue(node)) {
+            if (st[i].len + 1 == st[node].len && st[i].next.ContainsValue(node)) {
                 foreach (var trans in st[i].next) {
                     if (trans.Value == node) {
                         answer.Append(trans.Key);
@@ -148,37 +147,37 @@ public class SuffixAutomaton {
         }
         return s.ToString();
     }
-    public String MaxCommonSubstring(Char[] delim) {
+    public String MaxCommonSubstring() {
         Int32 state = FindStateThatMatchesMaxSubstring(delim);
         LongestSubstringBuilder(state);
         return GetAnswer();
     }
-}
-
-class Program {
-    static void Main(String[] args) {
-        SuffixAutomaton sa = new SuffixAutomaton();
+    public void InitializeFromConsole() {
         String line = Console.ReadLine();
         Int32 n = Convert.ToInt32(line);
         if (n > 10) {
             throw new Exception("Error: Wrong number of input strings");
         }
-        sa.N = n;
+        N = n;
         Char[] delimiter = new Char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-        Char[] delim = new Char[n];
+        delim = new Char[n];
         for (Int32 i = 0; i < n; i++) {
             delim[i] = delimiter[i];
         }
         for (Int32 i = 0; i < n; i++) {
             line = Console.ReadLine();
             for (Int32 j = 0, length = line.Length; j < length; j++) {
-                sa.Extend(line[j]);
+                Extend(line[j]);
             }
-            sa.Extend(delimiter[i]);
+            Extend(delimiter[i]);
         }
-            
-//        Console.WriteLine( "Total Memory Consumption {0} bytes.", GC.GetTotalMemory(false)); 
-        //sa.Print();
-        Console.WriteLine(sa.MaxCommonSubstring(delim));
+    }
+}
+
+class Program {
+    static void Main(String[] args) {
+        SuffixAutomaton sa = new SuffixAutomaton();
+        sa.InitializeFromConsole();
+        Console.WriteLine(sa.MaxCommonSubstring());
     }
 }

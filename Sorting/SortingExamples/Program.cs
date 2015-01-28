@@ -13,6 +13,17 @@ static class ArraySortingExtensions {
         }
     }
 
+    public static void InsertionSort<T>(this T[] a, IComparer<T> cmp) {
+        for (Int32 j = 1; j < a.Length; j++) {
+            T key = a[j];
+            Int32 i = j - 1;
+            for ( ; i > -1 && cmp.Compare(a[i], key) > 0; i--) {
+                a[i + 1] = a[i];
+            }
+            a[i + 1] = key;
+        }
+    }
+
     public static void Swap<T>(ref T a, ref T b) {
         T t = a;
         a = b;
@@ -33,10 +44,18 @@ public class IntAscComparer : IComparer<int> {
     }
 }
 
+public class IntDescComparer : IComparer<Int32> {
+    public Int32 Compare(Int32 x, Int32 y) {
+        return y - x;
+    }
+}
+
 class Program {
     static void Main(string[] args) {
         int[] arr = new int[] { 1, 5, 0, 89, 3, 7, 9, 53 };
         arr.BubbleSort(new IntAscComparer());
+        arr.ConsolePrint();
+        arr.InsertionSort(new IntDescComparer());
         arr.ConsolePrint();
     }
 }

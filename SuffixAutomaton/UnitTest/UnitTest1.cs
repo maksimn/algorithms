@@ -46,17 +46,19 @@ namespace UnitTest {
             for (int i = 0; i < s.Length; i++) {
                 sa.Extend(s[i]);
             }
-            Assert.AreEqual("aaa", sa.MaxCommonSubstring(new Char[] { '0', '1', '2' }));
+            sa.delim = new Char[] { '0', '1', '2' };
+            Assert.AreEqual("aaa", sa.MaxCommonSubstring());
         }
         [TestMethod]
         public void MaxCommonSubstrTest2() {
             SuffixAutomaton sa = new SuffixAutomaton();
             String s = "arrc0zrrv1trrn2";
             sa.N = 3;
+            sa.delim = new Char[] { '0', '1', '2' };
             for (int i = 0; i < s.Length; i++) {
                 sa.Extend(s[i]);
             }
-            Assert.AreEqual("rr", sa.MaxCommonSubstring(new Char[] { '0', '1', '2' }));
+            Assert.AreEqual("rr", sa.MaxCommonSubstring());
         }
         [TestMethod]
         public void MaxStateTest2() {
