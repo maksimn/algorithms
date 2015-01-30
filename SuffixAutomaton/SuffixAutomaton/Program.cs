@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 
@@ -11,9 +12,10 @@ public class SuffixAutomaton {
     public Int32 Size { get; set; }
     public Int32 Last { get; set; }
     private List<State> st = new List<State>();
-    public Char[] delim;
+    public Char[] delim { get; set; }
     private Boolean IsAchievableFlag = false;
     private Byte[] colorAttr = null;
+    private StringBuilder answer = new StringBuilder();
     public SuffixAutomaton() {
         st.Add(new State());
         Size = 1;
@@ -75,17 +77,10 @@ public class SuffixAutomaton {
                 return;
             }
             // Смотрим все состояния, смежные с текущим
-            foreach (var state in st[u].next) {
-                Boolean isMarkEqualToOther = false;
-                foreach (var otherDelimiter in other) {
-                    if (state.Key == otherDelimiter) {
-                        isMarkEqualToOther = true;
-                        break;
-                    }
-                }
+            foreach (var transition in st[u].next) {
                 // Если переход происходит не по метке с неподходящим разделителем, то добавляем состояние в очередь.
-                if (isMarkEqualToOther == false) {
-                    Int32 v = state.Value;
+                if (!other.Contains(transition.Key)) {
+                    Int32 v = transition.Value;
                     if (colorAttr[v] == 0) {
                         colorAttr[v] = 1;
                         queue.Enqueue(v);
@@ -102,15 +97,9 @@ public class SuffixAutomaton {
         return IsAchievableFlag;
     }
     public Boolean IsAllAchievable(Int32 node, Char[] delimiters) {
-        for (Int32 i = 0; i < N; i++) {
-            Char ch = delimiters[i];
-            Char[] other = new Char[N - 1];
-            for (Int32 k = 0, j = 0; k < N; k++) {
-                if (delimiters[k] != ch) {
-                    other[j++] = delimiters[k];
-                }
-            }
-            if (!IsAchievable(node, ch, other)) {
+        foreach (var di in delimiters) {
+            Char[] other = (from delim in delimiters where delim != di select delim).ToArray();
+            if (!IsAchievable(node, di, other)) {
                 return false;
             }
         }
@@ -126,7 +115,6 @@ public class SuffixAutomaton {
         }
         return currMaxState;
     }
-    public StringBuilder answer = new StringBuilder();
     public void LongestSubstringBuilder(Int32 node) {
         for (Int32 i = node - 1; i >= 0; i--) {
             if (st[i].len + 1 == st[node].len && st[i].next.ContainsValue(node)) {
@@ -140,7 +128,7 @@ public class SuffixAutomaton {
             }
         }
     }
-    public String GetAnswer() {
+    private String GetAnswer() {
         StringBuilder s = new StringBuilder();
         for (Int32 i = answer.Length - 1; i >= 0; i--) {
             s.Append(answer[i]);
@@ -160,13 +148,10 @@ public class SuffixAutomaton {
         }
         N = n;
         Char[] delimiter = new Char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-        delim = new Char[n];
-        for (Int32 i = 0; i < n; i++) {
-            delim[i] = delimiter[i];
-        }
+        delim = (Char[])delimiter.Take(N);
         for (Int32 i = 0; i < n; i++) {
             line = Console.ReadLine();
-            for (Int32 j = 0, length = line.Length; j < length; j++) {
+            for (Int32 j = 0; j < line.Length; j++) {
                 Extend(line[j]);
             }
             Extend(delimiter[i]);
