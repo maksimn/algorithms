@@ -148,7 +148,7 @@ public class SuffixAutomaton {
         }
         N = n;
         Char[] delimiter = new Char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-        delim = (Char[])delimiter.Take(N);
+        delim = delimiter.Take(N).ToArray();
         for (Int32 i = 0; i < n; i++) {
             line = Console.ReadLine();
             for (Int32 j = 0; j < line.Length; j++) {
