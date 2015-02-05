@@ -5,10 +5,10 @@ using System.Collections.Generic;
 static class ArraySortingExtensions {
     public static void BubbleSort<T>(this T[] a, IComparer<T> cmp) {
         int n = a.Length;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n - 1; j++) {
-                if (cmp.Compare(a[j], a[j + 1]) > 0) {
-                    Swap(ref a[j], ref a[j + 1]);
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = n - 1; j > i; j--) {
+                if (cmp.Compare(a[j], a[j - 1]) < 0) {
+                    Swap(ref a[j], ref a[j - 1]);
                 }
             }
         }
@@ -81,6 +81,25 @@ static class ArraySortingExtensions {
         a.MergeSort(0, a.Length - 1, cmp);
     }
 
+    public static Int32 BinarySearch(this Int32[] a, Int32 val) {
+        Int32 beg = 0, end = a.Length - 1;
+        while (beg != end) {
+            Int32 q = (beg + end) / 2;
+            if (a[q] == val) {
+                return q;
+            } else if (a[q] < val) {
+                beg = q;
+                continue;
+            } else {
+                end = q;
+            }
+        }
+        if (a[beg] == val) {
+            return beg;
+        }
+        return -1;
+    }
+
     public static void ConsolePrint<T>(this T[] a) {
         foreach (T x in a) {
             Console.Write(x + " ");
@@ -118,5 +137,6 @@ class Program {
         arr.MergeSort(new IntAscComparer());
         Console.WriteLine("Ascending MergeSort:");
         arr.ConsolePrint();
+        Console.WriteLine("BinarySearch result:" + arr.BinarySearch(5));
     }
 }
