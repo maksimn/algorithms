@@ -81,6 +81,59 @@ static class ArraySortingExtensions {
         a.MergeSort(0, a.Length - 1, cmp);
     }
 
+    public static Int32 counter;
+    public static void InversionCounter(this Int32[] a) {
+        Int32[] aCopy = new Int32[a.Length];
+        Array.Copy(a, aCopy, a.Length);
+        aCopy.InversionCounter(0, aCopy.Length - 1);
+    }
+    public static void InversionCounter(this Int32[] a, Int32 p, Int32 r) {
+        if (p < r) {
+            Int32 q = (p + r) / 2;
+            a.InversionCounter(p, q);
+            a.InversionCounter(q + 1, r);
+            a.MergeForInversionCounter(p, q, r);
+        }
+    }
+    public static void MergeForInversionCounter(this Int32[] a, Int32 p, Int32 q, Int32 r) {
+        Int32 n1 = q - p + 1;
+        Int32 n2 = r - q;
+        Int32[] L = a.Skip(p).Take(n1).ToArray();
+        Int32[] R = a.Skip(q + 1).Take(n2).ToArray();
+        CountInversions(L, R);
+        for (Int32 i = 0, j = 0, k = p; k <= r; k++) {
+            if (i < n1 && j < n2 && L[i] <= R[j]) {
+                a[k] = L[i++];
+            } else if (j < n2) {
+                a[k] = R[j++];
+            } else if (i < n1) {
+                a[k] = L[i++];
+            }
+        }
+    }
+    private static void CountInversions(Int32[] L, Int32[] R) {
+        Int32 _j = R.Length - 1;
+        for (Int32 i = L.Length - 1; i >= 0; i--) {
+            Boolean isR_j_LessThanL_i_Found = false;
+            for (Int32 j = _j; j >= 0; j--) {
+                if (R[j] < L[i]) {
+                    counter += j + 1;
+                    _j = j;
+                    isR_j_LessThanL_i_Found = true;
+                    break;
+                }
+            }
+            if (!isR_j_LessThanL_i_Found) {
+                break;
+            }
+        }
+    }
+    public static Int32 GetNumOfInversions(this Int32[] a) {
+        counter = 0;
+        a.InversionCounter();
+        return counter;
+    }
+
     public static Int32 BinarySearch(this Int32[] a, Int32 val) {
         Int32 beg = 0, end = a.Length - 1;
         while (beg != end) {
@@ -138,5 +191,12 @@ class Program {
         Console.WriteLine("Ascending MergeSort:");
         arr.ConsolePrint();
         Console.WriteLine("BinarySearch result:" + arr.BinarySearch(5));
+
+        Int32[] b = new Int32[] { 2, 3, 8, 6, 1 };
+        Console.WriteLine("Num Inversions must equal 5 : " + b.GetNumOfInversions());
+
+        Int32[] c = new Int32[] { 5, 4, 3, 2, 1 };
+        Console.WriteLine("Num Inversions must equal : " + c.GetNumOfInversions());
+
     }
 }
