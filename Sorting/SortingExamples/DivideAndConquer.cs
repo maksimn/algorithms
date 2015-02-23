@@ -1,8 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System; 
+
+public class Pair<T, U> {
+    public Pair() {
+    }
+    public Pair(T first, U second) {
+        First = first;
+        Second = second;
+    }
+    public T First { get; set; }
+    public U Second { get; set; }
+}
 
 static class DivideAndConquerExtensions {
-    public static Tuple<Int32, Int32> FindMaxSubarrayFast(this Int32[] a) {
+    public static Pair<Int32, Int32> FindMaxSubarrayFast(this Int32[] a) {
         Int64 currMaxSum = 0;
         Int64 maxSuffixSum = 0;
         if (a.Length > 0) {
@@ -11,19 +21,25 @@ static class DivideAndConquerExtensions {
         } else {
             return null;
         }
-        var currMax = new KeyValuePair<Int32, Int32>(0, 0);
-        var maxSuffix = new KeyValuePair<Int32, Int32>(0, 0);
+        var currMax = new Pair<Int32, Int32>(0, 0);
+        var maxSuffix = new Pair<Int32, Int32>(0, 0);
 
         for (Int32 i = 1; i < a.Length; i++) {
-            if (a[i] >= 0 && a[i - 1] >= 0) {
+            // 1. Найти максимальный подмассив-суффикс массива a[0...i] и его сумму
+            maxSuffix.Second = i;
+            if (maxSuffixSum >= 0) {
                 maxSuffixSum += a[i];
-                maxSuffix = new KeyValuePair<Int32, Int32>(maxSuffix.Key, i);
-                if (maxSuffixSum >= currMaxSum) {
-                    currMaxSum = maxSuffixSum;
-                    currMax = new KeyValuePair<Int32, Int32>(maxSuffix.Key, maxSuffix.Value);
-                }
+            } else {
+                maxSuffixSum = a[i];
+                maxSuffix.First = i;
+            }
+            // 2. Найти максимальный подмассив массива a[0...i]
+            if (maxSuffixSum >= currMaxSum) {
+                currMaxSum = maxSuffixSum;
+                currMax.First = maxSuffix.First;
+                currMax.Second = maxSuffix.Second;
             }
         }
-        return null;
+        return currMax;
     }
 }

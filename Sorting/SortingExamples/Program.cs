@@ -198,5 +198,8 @@ class Program {
         Int32[] c = new Int32[] { 5, 4, 3, 2, 1 };
         Console.WriteLine("Num Inversions must equal : " + c.GetNumOfInversions());
 
+        Int32[] d = new Int32[] { -2, 1, -3, 2 };
+        var res = d.FindMaxSubarrayFast();
+        Console.WriteLine("FindMaxSubarrayFast Test : {0} {1}", res.First, res.Second);
     }
 }
