@@ -15,10 +15,10 @@ static class DivideAndConquerExtensions {
         var maxSuffix = new KeyValuePair<Int32, Int32>(0, 0);
 
         for (Int32 i = 1; i < a.Length; i++) {
-            if (a[i] >= 0) {
+            if (a[i] >= 0 && a[i - 1] >= 0) {
                 maxSuffixSum += a[i];
                 maxSuffix = new KeyValuePair<Int32, Int32>(maxSuffix.Key, i);
-                if (maxSuffixSum > currMaxSum) {
+                if (maxSuffixSum >= currMaxSum) {
                     currMaxSum = maxSuffixSum;
                     currMax = new KeyValuePair<Int32, Int32>(maxSuffix.Key, maxSuffix.Value);
                 }
