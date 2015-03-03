@@ -201,5 +201,20 @@ class Program {
         Int32[] d = new Int32[] { -2, 1, -3, 2 };
         var res = d.FindMaxSubarrayFast();
         Console.WriteLine("FindMaxSubarrayFast Test : {0} {1}", res.First, res.Second);
+
+        Matrix<Int32> a = new Matrix<Int32>(2, 3);
+        Console.WriteLine("NumRows of a = " + a.NumRows);
+        Console.WriteLine("NumColumns of a = " + a.NumColumns);
+        a[1, 1] = 1; a[1, 2] = 2; a[1, 3] = 3;
+        a[2, 1] = 4; a[2, 2] = 5; a[2, 3] = 6;
+        a.ConsolePrint();
+        Console.WriteLine();
+        Matrix<Int32> b1 = new Matrix<Int32>(2, 3);
+        b1[1, 1] = 6; b1[1, 2] = 5; b1[1, 3] = 4;
+        b1[2, 1] = 3; b1[2, 2] = 2; b1[2, 3] = 1;
+        b1.ConsolePrint();
+        Console.WriteLine();
+        Matrix<Int32> a_plus_b1 = a + b1;
+        a_plus_b1.ConsolePrint();
     }
 }
