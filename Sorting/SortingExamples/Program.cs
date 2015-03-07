@@ -202,19 +202,37 @@ class Program {
         var res = d.FindMaxSubarrayFast();
         Console.WriteLine("FindMaxSubarrayFast Test : {0} {1}", res.First, res.Second);
 
-        Matrix<Int32> a = new Matrix<Int32>(2, 3);
+        MatrixCode();
+    }
+    static void MatrixCode() {
+        Matrix<Int32> a = new Matrix<Int32>(2, 3), b = new Matrix<Int32>(2, 3);
+        Matrix<Int32> c;
+
         Console.WriteLine("NumRows of a = " + a.NumRows);
         Console.WriteLine("NumColumns of a = " + a.NumColumns);
         a[1, 1] = 1; a[1, 2] = 2; a[1, 3] = 3;
         a[2, 1] = 4; a[2, 2] = 5; a[2, 3] = 6;
         a.ConsolePrint();
+        Console.WriteLine(); 
+        b[1, 1] = 6; b[1, 2] = 5; b[1, 3] = 4;
+        b[2, 1] = 3; b[2, 2] = 2; b[2, 3] = 1;
+        b.ConsolePrint();
         Console.WriteLine();
-        Matrix<Int32> b1 = new Matrix<Int32>(2, 3);
-        b1[1, 1] = 6; b1[1, 2] = 5; b1[1, 3] = 4;
-        b1[2, 1] = 3; b1[2, 2] = 2; b1[2, 3] = 1;
-        b1.ConsolePrint();
-        Console.WriteLine();
-        Matrix<Int32> a_plus_b1 = a + b1;
-        a_plus_b1.ConsolePrint();
+
+        c = a + b;
+        Console.WriteLine("a + b = ");
+        c.ConsolePrint();
+
+        Console.WriteLine("a - b = ");
+        c = a - b;
+        c.ConsolePrint();
+
+        Matrix<Double> A = new Matrix<Double>(2, 2), B = new Matrix<Double>(2, 2);
+        A[1, 1] = 2.0; B[1, 1] = 5.5;
+        A[1, 2] = 1.5; B[1, 2] = 1.3;
+        A[2, 1] = 2.5; B[2, 1] = 0;
+        A[2, 2] = 0.5; B[2, 2] = 1;
+
+        Matrix<Double> C = A * B; 
     }
 }

@@ -67,18 +67,45 @@ public class Matrix<T> {
             return _val.GetLength(1);
         }
     }
+    private static Boolean IsPow2(Int32 num) {
+        return !Convert.ToBoolean((num & (num - 1)));
+    }
     public static Matrix<T> operator +(Matrix<T> a, Matrix<T> b) {
-        if(a.NumRows != b.NumRows || a.NumColumns != b.NumColumns) {
+        return _Arythmetic(a, b, (aij, bij) => { dynamic v1 = aij, v2 = bij; return v1 + v2; });
+    }
+    public static Matrix<T> operator -(Matrix<T> a, Matrix<T> b) {
+        return _Arythmetic(a, b, (aij, bij) => { dynamic v1 = aij, v2 = bij; return v1 - v2; });
+    }
+    public static Matrix<T> operator *(Matrix<T> a, Matrix<T> b) {
+        if (a.NumColumns != b.NumRows) {
+            return null;
+        }
+        Matrix<T> c = new Matrix<T>(a.NumRows, b.NumColumns);
+        if (a.NumRows == a.NumColumns && IsPow2(a.NumRows)) {
+            // Strassen algorithm
+        }
+        // Trivial algorithm:
+        for (Int32 i = 1; i <= a.NumRows; i++) {
+            for (Int32 j = 1; j <= a.NumColumns; j++) {
+                dynamic res = 0, val1, val2;
+                for (Int32 k = 1; k <= a.NumColumns; k++) {
+                    val1 = a[i, k];
+                    val2 = b[k, j];
+                    res += val1 * val2;
+                }
+                c[i, j] = res;
+            }
+        }
+        return c;
+    }
+    private static Matrix<T> _Arythmetic(Matrix<T> a, Matrix<T> b, Func<T, T, T> arythmAction) {
+        if (a.NumRows != b.NumRows || a.NumColumns != b.NumColumns) {
             return null;
         }
         Matrix<T> c = new Matrix<T>(a.NumRows, a.NumColumns);
         for (Int32 i = 1; i <= a.NumRows; i++) {
             for (Int32 j = 1; j <= a.NumColumns; j++) {
-                //c[i, j] = a[i, j] + b[i, j]; it works in C++, but it doesn't in C#
-                //c[i, j] = (T)typeof(T).GetMethod("op_Addition").Invoke(null, new Object[] { a, b }); doesn't work with primitives
-                dynamic val1 = a[i, j], val2 = b[i, j];
-                dynamic res = val1 + val2;
-                c[i, j] = (T)res;
+                c[i, j] = arythmAction(a[i, j], b[i, j]);
             }
         }
         return c;
