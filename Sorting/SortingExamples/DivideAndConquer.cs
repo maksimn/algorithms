@@ -81,8 +81,10 @@ public class Matrix<T> {
             return null;
         }
         Matrix<T> c = new Matrix<T>(a.NumRows, b.NumColumns);
-        if (a.NumRows == a.NumColumns && IsPow2(a.NumRows)) {
+        if (a.NumRows == a.NumColumns && b.NumRows == b.NumColumns && IsPow2(a.NumRows)) {
             // Strassen algorithm
+            StrassenMultiplication(a, b, c);
+            return c;
         }
         // Trivial algorithm:
         for (Int32 i = 1; i <= a.NumRows; i++) {
@@ -118,5 +120,60 @@ public class Matrix<T> {
             }
             Console.Write(" |\n");
         }
+    }
+    private static void StrassenMultiplication(Matrix<T> a, Matrix<T> b, Matrix<T> c) {
+        Matrix<T>[] S = ComputeTenSMatrices(a, b);
+    }
+    private static Matrix<T>[] ComputeTenSMatrices(Matrix<T> a, Matrix<T> b) {
+        Int32 n = a.NumRows;
+        // Computing 10 S matrices:
+        Matrix<T>[] S = new Matrix<T>[10];
+        for (Int32 i = 0; i < S.Length; i++) {
+            S[i] = new Matrix<T>(n / 2, n / 2);
+        }
+        for (Int32 i = 1; i <= n / 2; i++) {
+            for (Int32 j = 1; j <= n / 2; j++) {
+                // Computing S_1 = B_12 - B_22
+                dynamic val1 = b[i, n / 2 + j], val2 = b[n / 2 + i, n / 2 + j];
+                S[0][i, j] = val1 - val2;
+                // S_2 = A_11 + A_12
+                val1 = a[i, j];
+                val2 = a[i, n / 2 + j];
+                S[1][i, j] = val1 + val2;
+                // S_3 = A_21 + A_22
+                val1 = a[n / 2 + i, j];
+                val2 = a[n / 2 + i, n / 2 + j];
+                S[2][i, j] = val1 + val2;
+                // S_4 = B_21 - B_11
+                val1 = b[n / 2 + i, j];
+                val2 = b[i, j];
+                S[3][i, j] = val1 - val2;
+                // S_5 = A_11 + A_22
+                val1 = a[i, j];
+                val2 = a[n / 2 + i, n / 2 + j];
+                S[4][i, j] = val1 + val2;
+                // S_6 = B_11 + B_22
+                val1 = b[i, j];
+                val2 = b[n / 2 + i, n / 2 + j];
+                S[5][i, j] = val1 + val2;
+                // S_7 = A_12 - A_22
+                val1 = a[i, n / 2 + j];
+                val2 = a[n / 2 + i, n / 2 + j];
+                S[6][i, j] = val1 - val2;
+                // S_8 = B_21 + B_22
+                val1 = b[n / 2 + i, j];
+                val2 = b[n / 2 + i, n / 2 + j];
+                S[7][i, j] = val1 + val2;
+                // S_9 = A_11 - A_21
+                val1 = a[i, j];
+                val2 = a[n / 2 + i, j];
+                S[8][i, j] = val1 - val2;
+                // S_10 = B_11 + B_12
+                val1 = b[i, j];
+                val2 = b[i, n / 2 + j];
+                S[9][i, j] = val1 + val2;
+            }
+        }
+        return S;
     }
 }
