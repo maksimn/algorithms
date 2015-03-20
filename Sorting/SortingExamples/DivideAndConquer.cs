@@ -82,12 +82,10 @@ public class Matrix<T> {
         }
         Matrix<T> c = new Matrix<T>(a.NumRows, b.NumColumns);
         if (a.NumRows == a.NumColumns && b.NumRows == b.NumColumns && IsPow2(a.NumRows)) {
-            // Strassen algorithm
-            StrassenMultiplication(a, b, c);
+            StrassenMultiplication(a, b, c); // Strassen algorithm
             return c;
         }
-        // Trivial algorithm:
-        for (Int32 i = 1; i <= a.NumRows; i++) {
+        for (Int32 i = 1; i <= a.NumRows; i++) { // Trivial algorithm:            
             for (Int32 j = 1; j <= a.NumColumns; j++) {
                 dynamic res = 0, val1, val2;
                 for (Int32 k = 1; k <= a.NumColumns; k++) {
@@ -122,12 +120,20 @@ public class Matrix<T> {
         }
     }
     private static void StrassenMultiplication(Matrix<T> a, Matrix<T> b, Matrix<T> c) {
-        Int32 n = a.NumRows;
-        var aInd = new SubmatrixIndices() { i_min = 1, j_min = 1, n = n };
+        Console.WriteLine("Strassen");
+        Int32 num = a.NumRows;
+        var aInd = new SubmatrixIndices() { i_min = 1, j_min = 1, n = num };
         StrassenMultiplication(a, aInd, b, aInd, c, aInd);
     }
     private static void StrassenMultiplication(Matrix<T> a, SubmatrixIndices aIndices, 
         Matrix<T> b, SubmatrixIndices bIndices, Matrix<T> c, SubmatrixIndices cIndices) {
+        if (aIndices.n == 1) {
+        // Здесь нужно реализовать перемножение матриц единичного размера
+            dynamic val1 = a[aIndices.i_min, aIndices.j_min],
+                    val2 = b[bIndices.i_min, bIndices.j_min];
+            c[cIndices.i_min, cIndices.j_min] = val1 * val2;
+            return;
+        }
         // 1. Разбиение на подматрицы
         Int32 sz = aIndices.n / 2;
         SubmatrixIndices a11 = new SubmatrixIndices() { 
@@ -166,7 +172,7 @@ public class Matrix<T> {
         SubmatrixIndices c22 = new SubmatrixIndices() {
             i_min = cIndices.i_min + sz, j_min = cIndices.j_min + sz, n = sz
         };
-        // Создание и вычисление матриц S_1, ..., S_10
+        // 2. Создание и вычисление матриц S[1], ..., S[10]
         Matrix<T>[] S = new Matrix<T>[10];
         for (Int32 i = 0; i < S.Length; i++) {
             S[i] = new Matrix<T>(sz, sz);
@@ -174,6 +180,48 @@ public class Matrix<T> {
         SubmatrixIndices sInd = new SubmatrixIndices() { i_min = 1, j_min = 1, n = sz };
         SubmatrixSubtract(b, b12, b, b22, S[0], sInd);
         SubmatrixSum(a, a11, a, a12, S[1], sInd);
+        SubmatrixSum(a, a21, a, a22, S[2], sInd);
+        SubmatrixSubtract(b, b21, b, b11, S[3], sInd);
+        SubmatrixSum(a, a11, a, a22, S[4], sInd);
+        SubmatrixSum(b, b11, b, b22, S[5], sInd);
+        SubmatrixSubtract(a, a12, a, a22, S[6], sInd);
+        SubmatrixSum(b, b21, b, b22, S[7], sInd);
+        SubmatrixSubtract(a, a11, a, a21, S[8], sInd);
+        SubmatrixSum(b, b11, b, b12, S[9], sInd);
+/*        for (Int32 i = 0; i < S.Length; i++) {
+            Console.WriteLine("S[{0}]=", i);
+            S[i].ConsolePrint();
+        } 
+*/
+        // 3. Создание и рекурсивное вычисление матриц P[1], ..., P[7]
+        Matrix<T>[] P = new Matrix<T>[7];
+        for (Int32 i = 0; i < P.Length; i++) {
+            P[i] = new Matrix<T>(sz, sz);
+        }
+        StrassenMultiplication(a, a11, S[0], sInd, P[0], sInd);
+        StrassenMultiplication(S[1], sInd, b, b22, P[1], sInd);
+        StrassenMultiplication(S[2], sInd, b, b11, P[2], sInd);
+        StrassenMultiplication(a, a22, S[3], sInd, P[3], sInd);
+        StrassenMultiplication(S[4], sInd, S[5], sInd, P[4], sInd);
+        StrassenMultiplication(S[6], sInd, S[7], sInd, P[5], sInd);
+        StrassenMultiplication(S[8], sInd, S[9], sInd, P[6], sInd);
+        for (Int32 i = 0; i < P.Length; i++) {
+            Console.WriteLine("P[{0}]=", i);
+            P[i].ConsolePrint();
+        }            
+        // 4. Вычисление подматриц C11, C12, C21, C22, линейных по P[1] ... P[7]
+        Matrix<T> temp1 = new Matrix<T>(sz, sz);
+        SubmatrixSum(P[4], sInd, P[3], sInd, temp1, sInd);
+        Matrix<T> temp2 = new Matrix<T>(sz, sz);
+        SubmatrixSubtract(temp1, sInd, P[1], sInd, temp2, sInd);
+        SubmatrixSum(temp2, sInd, P[5], sInd, c, a11);
+        SubmatrixSum(P[0], sInd, P[1], sInd, c, a12);
+        SubmatrixSum(P[2], sInd, P[3], sInd, c, a21);
+        temp1 = new Matrix<T>(sz, sz);
+        temp2 = new Matrix<T>(sz, sz);
+        SubmatrixSum(P[4], sInd, P[0], sInd, temp1, sInd);
+        SubmatrixSubtract(temp1, sInd, P[2], sInd, temp2, sInd);
+        SubmatrixSubtract(temp2, sInd, P[6], sInd, c, a22);
     }
     private static void SubmatrixSum(Matrix<T> a, SubmatrixIndices aInd, 
             Matrix<T> b, SubmatrixIndices bInd, Matrix<T> c, SubmatrixIndices cInd) {
@@ -192,12 +240,12 @@ public class Matrix<T> {
     private static void SubmatrixArythm(Matrix<T> a, SubmatrixIndices aInd, 
             Matrix<T> b, SubmatrixIndices bInd, Matrix<T> c, SubmatrixIndices cInd,
             Func<T, T, T> callback) {
-        Int32 sz = aInd.n;
-        Matrix<T> res = new Matrix<T>(sz, sz);
+        Int32 sz = aInd.n; 
         Int32 i_a = aInd.i_min, j_a = aInd.j_min, i_b = bInd.i_min, j_b = bInd.j_min;
         for (Int32 i = 0; i < sz; i++) {
-            for (Int32 j = 0; j < sz; j++) { 
-                res[i + 1, j + 1] = callback(a[i_a + i, j_a + j], b[i_b + i, j_b + j]);
+            for (Int32 j = 0; j < sz; j++) {
+                c[cInd.i_min + i, cInd.j_min + j] = callback(a[i_a + i, j_a + j], b[i_b + i, j_b + j]);
+                //Console.WriteLine("S[][{0}][{1}] = {2}", cInd.i_min + i, cInd.j_min + j, c[cInd.i_min + i, cInd.j_min + j]);
             }
         }
     }
