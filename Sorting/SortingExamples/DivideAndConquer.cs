@@ -120,15 +120,12 @@ public class Matrix<T> {
         }
     }
     private static void StrassenMultiplication(Matrix<T> a, Matrix<T> b, Matrix<T> c) {
-        Console.WriteLine("Strassen");
-        Int32 num = a.NumRows;
-        var aInd = new SubmatrixIndices() { i_min = 1, j_min = 1, n = num };
+        var aInd = new SubmatrixIndices() { i_min = 1, j_min = 1, n = a.NumRows };
         StrassenMultiplication(a, aInd, b, aInd, c, aInd);
     }
     private static void StrassenMultiplication(Matrix<T> a, SubmatrixIndices aIndices, 
         Matrix<T> b, SubmatrixIndices bIndices, Matrix<T> c, SubmatrixIndices cIndices) {
-        if (aIndices.n == 1) {
-        // Здесь нужно реализовать перемножение матриц единичного размера
+        if (aIndices.n == 1) { // Здесь нужно реализовать перемножение матриц единичного размера
             dynamic val1 = a[aIndices.i_min, aIndices.j_min],
                     val2 = b[bIndices.i_min, bIndices.j_min];
             c[cIndices.i_min, cIndices.j_min] = val1 * val2;
@@ -136,42 +133,21 @@ public class Matrix<T> {
         }
         // 1. Разбиение на подматрицы
         Int32 sz = aIndices.n / 2;
-        SubmatrixIndices a11 = new SubmatrixIndices() { 
-            i_min = aIndices.i_min, j_min = aIndices.j_min, n = sz 
-        };
-        SubmatrixIndices a12 = new SubmatrixIndices() {
-            i_min = aIndices.i_min, j_min = aIndices.j_min + sz, n = sz
-        };
-        SubmatrixIndices a21 = new SubmatrixIndices() {
-            i_min = aIndices.i_min + sz, j_min = aIndices.j_min, n = sz
-        };
-        SubmatrixIndices a22 = new SubmatrixIndices() {
-            i_min = aIndices.i_min + sz, j_min = aIndices.j_min + sz, n = sz
-        };
-        SubmatrixIndices b11 = new SubmatrixIndices() {
-            i_min = bIndices.i_min, j_min = bIndices.j_min, n = sz
-        };
-        SubmatrixIndices b12 = new SubmatrixIndices() {
-            i_min = bIndices.i_min, j_min = bIndices.j_min + sz, n = sz
-        };
-        SubmatrixIndices b21 = new SubmatrixIndices() {
-            i_min = bIndices.i_min + sz, j_min = bIndices.j_min, n = sz
-        };
-        SubmatrixIndices b22 = new SubmatrixIndices() {
-            i_min = bIndices.i_min + sz, j_min = bIndices.j_min + sz, n = sz
-        };
-        SubmatrixIndices c11 = new SubmatrixIndices() {
-            i_min = cIndices.i_min, j_min = cIndices.j_min, n = sz
-        };
-        SubmatrixIndices c12 = new SubmatrixIndices() {
-            i_min = cIndices.i_min, j_min = cIndices.j_min + sz, n = sz
-        };
-        SubmatrixIndices c21 = new SubmatrixIndices() {
-            i_min = cIndices.i_min + sz, j_min = cIndices.j_min, n = sz
-        };
-        SubmatrixIndices c22 = new SubmatrixIndices() {
-            i_min = cIndices.i_min + sz, j_min = cIndices.j_min + sz, n = sz
-        };
+        var a11 = new SubmatrixIndices() { i_min = aIndices.i_min, j_min = aIndices.j_min, n = sz };
+        var a12 = new SubmatrixIndices() { i_min = aIndices.i_min, j_min = aIndices.j_min + sz, n = sz };
+        var a21 = new SubmatrixIndices() { i_min = aIndices.i_min + sz, j_min = aIndices.j_min, n = sz };
+        var a22 = new SubmatrixIndices() { i_min = aIndices.i_min + sz, j_min = aIndices.j_min + sz, n = sz };
+
+        var b11 = new SubmatrixIndices() { i_min = bIndices.i_min, j_min = bIndices.j_min, n = sz };
+        var b12 = new SubmatrixIndices() { i_min = bIndices.i_min, j_min = bIndices.j_min + sz, n = sz };
+        var b21 = new SubmatrixIndices() { i_min = bIndices.i_min + sz, j_min = bIndices.j_min, n = sz };
+        var b22 = new SubmatrixIndices() { i_min = bIndices.i_min + sz, j_min = bIndices.j_min + sz, n = sz };
+
+        var c11 = new SubmatrixIndices() { i_min = cIndices.i_min, j_min = cIndices.j_min, n = sz };
+        var c12 = new SubmatrixIndices() { i_min = cIndices.i_min, j_min = cIndices.j_min + sz, n = sz };
+        var c21 = new SubmatrixIndices() { i_min = cIndices.i_min + sz, j_min = cIndices.j_min, n = sz };
+        var c22 = new SubmatrixIndices() { i_min = cIndices.i_min + sz, j_min = cIndices.j_min + sz, n = sz };
+
         // 2. Создание и вычисление матриц S[1], ..., S[10]
         Matrix<T>[] S = new Matrix<T>[10];
         for (Int32 i = 0; i < S.Length; i++) {
@@ -188,11 +164,7 @@ public class Matrix<T> {
         SubmatrixSum(b, b21, b, b22, S[7], sInd);
         SubmatrixSubtract(a, a11, a, a21, S[8], sInd);
         SubmatrixSum(b, b11, b, b12, S[9], sInd);
-/*        for (Int32 i = 0; i < S.Length; i++) {
-            Console.WriteLine("S[{0}]=", i);
-            S[i].ConsolePrint();
-        } 
-*/
+
         // 3. Создание и рекурсивное вычисление матриц P[1], ..., P[7]
         Matrix<T>[] P = new Matrix<T>[7];
         for (Int32 i = 0; i < P.Length; i++) {
@@ -205,23 +177,20 @@ public class Matrix<T> {
         StrassenMultiplication(S[4], sInd, S[5], sInd, P[4], sInd);
         StrassenMultiplication(S[6], sInd, S[7], sInd, P[5], sInd);
         StrassenMultiplication(S[8], sInd, S[9], sInd, P[6], sInd);
-        for (Int32 i = 0; i < P.Length; i++) {
-            Console.WriteLine("P[{0}]=", i);
-            P[i].ConsolePrint();
-        }            
+
         // 4. Вычисление подматриц C11, C12, C21, C22, линейных по P[1] ... P[7]
         Matrix<T> temp1 = new Matrix<T>(sz, sz);
         SubmatrixSum(P[4], sInd, P[3], sInd, temp1, sInd);
         Matrix<T> temp2 = new Matrix<T>(sz, sz);
         SubmatrixSubtract(temp1, sInd, P[1], sInd, temp2, sInd);
-        SubmatrixSum(temp2, sInd, P[5], sInd, c, a11);
-        SubmatrixSum(P[0], sInd, P[1], sInd, c, a12);
-        SubmatrixSum(P[2], sInd, P[3], sInd, c, a21);
+        SubmatrixSum(temp2, sInd, P[5], sInd, c, c11);
+        SubmatrixSum(P[0], sInd, P[1], sInd, c, c12);
+        SubmatrixSum(P[2], sInd, P[3], sInd, c, c21);
         temp1 = new Matrix<T>(sz, sz);
         temp2 = new Matrix<T>(sz, sz);
         SubmatrixSum(P[4], sInd, P[0], sInd, temp1, sInd);
         SubmatrixSubtract(temp1, sInd, P[2], sInd, temp2, sInd);
-        SubmatrixSubtract(temp2, sInd, P[6], sInd, c, a22);
+        SubmatrixSubtract(temp2, sInd, P[6], sInd, c, c22);
     }
     private static void SubmatrixSum(Matrix<T> a, SubmatrixIndices aInd, 
             Matrix<T> b, SubmatrixIndices bInd, Matrix<T> c, SubmatrixIndices cInd) {
@@ -244,8 +213,7 @@ public class Matrix<T> {
         Int32 i_a = aInd.i_min, j_a = aInd.j_min, i_b = bInd.i_min, j_b = bInd.j_min;
         for (Int32 i = 0; i < sz; i++) {
             for (Int32 j = 0; j < sz; j++) {
-                c[cInd.i_min + i, cInd.j_min + j] = callback(a[i_a + i, j_a + j], b[i_b + i, j_b + j]);
-                //Console.WriteLine("S[][{0}][{1}] = {2}", cInd.i_min + i, cInd.j_min + j, c[cInd.i_min + i, cInd.j_min + j]);
+                c[cInd.i_min + i, cInd.j_min + j] = callback(a[i_a + i, j_a + j], b[i_b + i, j_b + j]); 
             }
         }
     }

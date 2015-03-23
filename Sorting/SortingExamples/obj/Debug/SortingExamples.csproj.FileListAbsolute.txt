@@ -9,4 +9,3 @@ D:\PrevRabStol\MyProgramming\C#\Algorithms\Sorting\SortingExamples\obj\Debug\Sor
 D:\PrevRabStol\MyProgramming\C#\Algorithms\Sorting\SortingExamples\obj\Debug\SortingExamples.pdb
 D:\PrevRabStol\MyProgramming\C#\Algorithms\Sorting\SortingExamples\bin\Debug\SortingExamples.exe
 D:\PrevRabStol\MyProgramming\C#\Algorithms\Sorting\SortingExamples\bin\Debug\SortingExamples.pdb
-D:\PrevRabStol\MyProgramming\C#\Algorithms\Sorting\SortingExamples\obj\Debug\SortingExamples.csprojResolveAssemblyReference.cache
