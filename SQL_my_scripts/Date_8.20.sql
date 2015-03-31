@@ -1,0 +1,8 @@
+﻿/* Date, Task 8.20 */
+USE SPJ_db;
+
+SELECT S.S#, P.P#, J.J#
+FROM S, P, J
+WHERE NOT (
+	S.CITY = P.CITY OR S.CITY = J.CITY OR P.CITY = J.CITY
+);

@@ -1,0 +1,6 @@
+﻿/* Date, Task 8.18 */
+USE SPJ_db;
+
+SELECT S.S#, P.P#, J.J#
+FROM S, P, J
+WHERE S.CITY = P.CITY AND P.CITY = J.CITY;

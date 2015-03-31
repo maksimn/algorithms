@@ -1,0 +1,10 @@
+﻿/* Date, Task 8.22 */
+USE SPJ_db;
+
+SELECT DISTINCT SPJ.P#
+FROM SPJ
+WHERE 
+	(SELECT S.CITY FROM S WHERE S.S# = SPJ.S#) = 'London'
+	AND
+	(SELECT J.CITY FROM J WHERE J.J# = SPJ.J#) = 'London';
+	

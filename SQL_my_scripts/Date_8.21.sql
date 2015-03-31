@@ -1,0 +1,8 @@
+﻿/* Date, Task 8.21 */
+USE SPJ_db;
+
+SELECT DISTINCT P.*
+FROM P
+JOIN SPJ ON P.P# = SPJ.P#
+JOIN S ON S.S# = SPJ.S#
+WHERE S.CITY = 'London';
