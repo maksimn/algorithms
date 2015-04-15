@@ -1,4 +1,5 @@
 ﻿using System; 
+using System.Collections.Generic;
 
 namespace DesignPatterns {
     // Декоратор - паттерн, структурирующий объекты.
@@ -42,6 +43,45 @@ namespace DesignPatterns {
             DrawBorder();
         }
         private void DrawBorder() {
+            Console.WriteLine("Draw Border with width {0}", width);
+        }
+    }
+    // Класс, добавляющий к элементу полосу прокрутки
+    public class ScrollDecorator : Decorator {
+        private Int32 scrollPosition = 0;
+        public ScrollDecorator(VisualComponent component) : base(component) { 
+        }
+        public override void Draw() {
+            base.Draw();
+            ScrollTo(scrollPosition);
+        }
+        public void ScrollTo(Int32 pos) {
+            scrollPosition = pos;
+            Console.WriteLine("Scroll to {0} scroll position", scrollPosition);
+        }
+    }
+    // Окно для добавления визуальных элементов
+    public class Window {
+        private List<VisualComponent> elements = new List<VisualComponent>();
+        public void SetElement(VisualComponent component) {
+            elements.Add(component);
+        }
+        public void Show() {
+            foreach (var e in elements) {
+                e.Draw();
+            }
+        }
+    }
+    // Демонстрация работы паттерна Декоратор
+    public static class DecoratorDemo {
+        public static void ShowDemo() {
+            Window window = new Window();
+            TextView textView = new TextView();
+            window.Show();
+            window.SetElement(textView); // Simple TextView
+            BorderDecorator borderedScrollableTextView = new BorderDecorator(new ScrollDecorator(textView), 5);
+            window.SetElement(borderedScrollableTextView);
+            window.Show();
         }
     }
 }

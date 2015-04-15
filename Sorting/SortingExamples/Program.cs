@@ -203,7 +203,8 @@ class Program {
         Console.WriteLine("FindMaxSubarrayFast Test : {0} {1}", res.First, res.Second);
 
         //MatrixCode();
-        DesignPatterns.ObserverPatternTest.Do();
+        //DesignPatterns.ObserverPatternTest.Do();
+        DesignPatterns.DecoratorDemo.ShowDemo();
     }
     static void MatrixCode() {
         Matrix<Int32> a = new Matrix<Int32>(2, 3), b = new Matrix<Int32>(2, 3);
