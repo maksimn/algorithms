@@ -77,8 +77,7 @@ namespace DesignPatterns {
         public static void ShowDemo() {
             Window window = new Window();
             TextView textView = new TextView();
-            window.Show();
-            window.SetElement(textView); // Simple TextView
+            window.SetElement(textView); // Simple TextView 
             BorderDecorator borderedScrollableTextView = new BorderDecorator(new ScrollDecorator(textView), 5);
             window.SetElement(borderedScrollableTextView);
             window.Show();
