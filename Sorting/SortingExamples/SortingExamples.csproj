@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DesignPatterns\AbstractFactory.cs" />
     <Compile Include="DesignPatterns\Decorator.cs" />
     <Compile Include="DesignPatterns\Observer.cs" />
     <Compile Include="DivideAndConquer.cs" />
