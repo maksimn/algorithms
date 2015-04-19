@@ -175,6 +175,14 @@ public class IntDescComparer : IComparer<Int32> {
 
 class Program {
     static void Main(String[] args) {
+        //FirstAlgorithmsDemo();
+        //MatrixCode();
+        //DesignPatterns.ObserverPatternTest.Do();
+        HeapSortDemo();
+        //DesignPatterns.DecoratorDemo.ShowDemo();
+    }
+
+    private static void FirstAlgorithmsDemo() {
         Int32[] arr = new Int32[] { 1, 5, 0, 89, 3, 7, 9, 53 };
         arr.BubbleSort(new IntAscComparer());
         arr.ConsolePrint();
@@ -201,11 +209,8 @@ class Program {
         Int32[] d = new Int32[] { -2, 1, -3, 2 };
         var res = d.FindMaxSubarrayFast();
         Console.WriteLine("FindMaxSubarrayFast Test : {0} {1}", res.First, res.Second);
-
-        //MatrixCode();
-        //DesignPatterns.ObserverPatternTest.Do();
-        DesignPatterns.DecoratorDemo.ShowDemo();
     }
+
     static void MatrixCode() {
         Matrix<Int32> a = new Matrix<Int32>(2, 3), b = new Matrix<Int32>(2, 3);
         Matrix<Int32> c;
@@ -245,5 +250,19 @@ class Program {
         C = A * B;
 
         C.ConsolePrint();
+    }
+
+    static void HeapSortDemo() {
+        Int32[] arr = new Int32[] { 1, 5, 0, 89, 3, 7, 9, 53 };
+        arr.SetHeapSize(5);
+        Console.WriteLine("a HeapSize is " + arr.GetHeapSize());
+        arr.SetHeapSize(4);
+        Console.WriteLine("a HeapSize is " + arr.GetHeapSize());
+
+        Int32[] b = new Int32[] { 2, 3, 8, 6, 1 };
+        Console.WriteLine("b HeapSize is " + b.GetHeapSize());
+        b.SetHeapSize(10);
+        Console.WriteLine("b HeapSize is " + b.GetHeapSize());
+        Console.WriteLine("a HeapSize is " + arr.GetHeapSize()); 
     }
 }
