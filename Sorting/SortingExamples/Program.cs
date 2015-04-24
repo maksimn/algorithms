@@ -177,8 +177,8 @@ class Program {
     static void Main(String[] args) {
         //FirstAlgorithmsDemo();
         //MatrixCode();
-        //DesignPatterns.ObserverPatternTest.Do();
         HeapSortDemo();
+        //DesignPatterns.ObserverPatternTest.Do();
         //DesignPatterns.DecoratorDemo.ShowDemo();
     }
 
@@ -253,16 +253,10 @@ class Program {
     }
 
     static void HeapSortDemo() {
-        Int32[] arr = new Int32[] { 1, 5, 0, 89, 3, 7, 9, 53 };
-        arr.SetHeapSize(5);
-        Console.WriteLine("a HeapSize is " + arr.GetHeapSize());
-        arr.SetHeapSize(4);
-        Console.WriteLine("a HeapSize is " + arr.GetHeapSize());
-
-        Int32[] b = new Int32[] { 2, 3, 8, 6, 1 };
-        Console.WriteLine("b HeapSize is " + b.GetHeapSize());
-        b.SetHeapSize(10);
-        Console.WriteLine("b HeapSize is " + b.GetHeapSize());
-        Console.WriteLine("a HeapSize is " + arr.GetHeapSize()); 
+        //Int32[] a = new Int32[] { 1, 5, 0, 89, 3, 7, 9, 53 };
+        Int32[] a = new Int32[] { 2, 1, 3 };
+        a.ConsolePrint();
+        a.HeapSort();
+        a.ConsolePrint();
     }
 }
