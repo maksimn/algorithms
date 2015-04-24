@@ -72,7 +72,7 @@ namespace DesignPatterns {
     }
 
     internal class MazeGame {
-        public Maze CreateMaze() {
+        public Maze AntipatternCreateMaze() {
             Maze aMaze = new Maze();
             Room r1 = new Room(1);
             Room r2 = new Room(2);
@@ -91,8 +91,75 @@ namespace DesignPatterns {
 
             return aMaze;
         }
+        // CreateMaze() метод, использующий абстрактную фабрику
+        public Maze CreateMaze(MazeFactory factory) {
+            Maze aMaze = factory.MakeMaze();
+            Room r1 = factory.MakeRoom(1);
+            Room r2 = factory.MakeRoom(2);
+            Door aDoor = factory.MakeDoor(r1, r2);
+
+            aMaze.AddRoom(r1);
+            aMaze.AddRoom(r2);
+
+            r1.SetSide(Direction.North, factory.MakeWall());
+            r1.SetSide(Direction.East, aDoor);
+            r1.SetSide(Direction.South, factory.MakeWall());
+            r1.SetSide(Direction.West, factory.MakeWall());
+
+            r2.SetSide(Direction.North, factory.MakeWall());
+            r2.SetSide(Direction.East, factory.MakeWall());
+            r2.SetSide(Direction.South, factory.MakeWall());
+            r2.SetSide(Direction.West, aDoor);
+
+            return aMaze;
+        }
     }
 
     // Абстрактная фабрика предоставляет интерфейс для создания семейств связанных или зависимых 
     // объектов без задания их конкретных классов.
+    // Паттерн создания объектов
+    internal class MazeFactory {
+        public virtual Maze MakeMaze() {
+            return new Maze();
+        }
+        public virtual Wall MakeWall() {
+            return new Wall();
+        }
+        public virtual Room MakeRoom(Int32 n) {
+            return new Room(n);
+        }
+        public virtual Door MakeDoor(Room r1, Room r2) {
+            return new Door(r1, r2);
+        }
+    }
+
+    internal class EnchantedMazeFactory : MazeFactory {
+        public override Room MakeRoom(Int32 n) {
+            return new EnchantedRoom(n, CastSpell());
+        }
+        public override Door MakeDoor(Room r1, Room r2) {
+            return new DoorNeedingSpell(r1, r2);
+        }
+        protected Spell CastSpell() {
+            return null;
+        }
+    }
+
+    internal class BombedMazeFactory : MazeFactory {
+        public override Wall MakeWall() {
+            return BombedWall();
+        }
+        public override Room MakeRoom(Int32 n) {
+            return new RoomWithABomb(n);
+        }
+    }
+
+    internal static class AbstractFactoryDemo {
+        public static void Demonstrate() {
+            MazeGame game = new MazeGame();
+            BombedMazeFactory factory = new BombedMazeFactory();
+
+            game.CreateMaze(factory);
+        }
+    }
 }
