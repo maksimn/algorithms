@@ -253,10 +253,12 @@ class Program {
     }
 
     static void HeapSortDemo() {
-        //Int32[] a = new Int32[] { 1, 5, 0, 89, 3, 7, 9, 53 };
-        Int32[] a = new Int32[] { 2, 1, 3 };
+        Int32[] a = new Int32[] { 1, 5, 0, 89, 3, 7, 9, 53 };
+        //Int32[] a = new Int32[] { 2, 1, 3 };
         a.ConsolePrint();
-        a.HeapSort();
+        a.HeapSort(new IntAscComparer());
+        a.ConsolePrint();
+        a.HeapSort(new IntDescComparer());
         a.ConsolePrint();
     }
 }

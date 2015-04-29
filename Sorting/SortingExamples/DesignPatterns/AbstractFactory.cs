@@ -145,9 +145,34 @@ namespace DesignPatterns {
         }
     }
 
+    internal class EnchantedRoom : Room {
+        public EnchantedRoom(Int32 n, Spell spell) : base(n) {
+        }
+    }
+
+    internal class Spell {
+
+    }
+
+    internal class DoorNeedingSpell : Door {
+        public DoorNeedingSpell(Room r, Room q) : base(r, q) {
+
+        }
+    }
+
+    internal class BombedWall : Wall {
+
+    }
+
+    internal class RoomWithABomb : Room {
+        public RoomWithABomb(Int32 n) : base(n) {
+
+        }
+    }
+
     internal class BombedMazeFactory : MazeFactory {
         public override Wall MakeWall() {
-            return BombedWall();
+            return new BombedWall();
         }
         public override Room MakeRoom(Int32 n) {
             return new RoomWithABomb(n);

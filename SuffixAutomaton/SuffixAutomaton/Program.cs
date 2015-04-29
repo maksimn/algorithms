@@ -8,7 +8,7 @@ public class SuffixAutomaton {
         public Int32 len, link;
         public SortedDictionary<Char, Int32> next = new SortedDictionary<Char, Int32>();
     }
-    public Int32 N { get; set; } // число подстрок
+    public Int32 N { get; set; } // число входных строк
     public Int32 Size { get; set; }
     public Int32 Last { get; set; }
     private List<State> st = new List<State>();
