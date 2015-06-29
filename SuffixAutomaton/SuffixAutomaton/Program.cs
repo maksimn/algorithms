@@ -59,7 +59,6 @@ public interface ISolver<in T, out TResult> {
 }
 
 public class MaxCommonSubstrSolver : SuffixAutomaton<ColoredState>, ISolver<Object, String> {
-    public Int32 N { get; set; } // число входных строк
     public Char[] delim { get; set; }
     private Boolean IsAchievableFlag = false;
     private StringBuilder answer = new StringBuilder();
@@ -103,19 +102,19 @@ public class MaxCommonSubstrSolver : SuffixAutomaton<ColoredState>, ISolver<Obje
         IsAchievableAux(node, d, other);
         return IsAchievableFlag;
     }
-    public Boolean IsAllAchievable(Int32 node, Char[] delimiters) {
-        foreach (var di in delimiters) {
-            Char[] other = (from delim in delimiters where delim != di select delim).ToArray();
+    public Boolean IsAllAchievable(Int32 node) {
+        foreach (var di in delim) {
+            Char[] other = (from del in delim where del != di select del).ToArray();
             if (!IsAchievable(node, di, other)) {
                 return false;
             }
         }
         return true;
     }
-    public Int32 FindStateThatMatchesMaxSubstring(Char[] delimiters) {
+    public Int32 FindStateThatMatchesMaxSubstring() {
         Int32 currMaxState = 0, longest = 0;
         for (Int32 i = 1; i < Size; i++) {
-            if (IsAllAchievable(i, delimiters) && st[i].len > longest) {
+            if (IsAllAchievable(i) && st[i].len > longest) {
                 currMaxState = i;
                 longest = st[i].len;
             }
@@ -143,7 +142,7 @@ public class MaxCommonSubstrSolver : SuffixAutomaton<ColoredState>, ISolver<Obje
         return s.ToString();
     }
     public String MaxCommonSubstring() {
-        Int32 state = FindStateThatMatchesMaxSubstring(delim);
+        Int32 state = FindStateThatMatchesMaxSubstring();
         LongestSubstringBuilder(state);
         return GetAnswer();
     }
@@ -153,9 +152,8 @@ public class MaxCommonSubstrSolver : SuffixAutomaton<ColoredState>, ISolver<Obje
         if (n > 10) {
             throw new Exception("Error: Wrong number of input strings");
         }
-        N = n;
         Char[] delimiter = new Char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-        delim = delimiter.Take(N).ToArray();
+        delim = delimiter.Take(n).ToArray();
         for (Int32 i = 0; i < n; i++) {
             line = Console.ReadLine();
             for (Int32 j = 0; j < line.Length; j++) {
