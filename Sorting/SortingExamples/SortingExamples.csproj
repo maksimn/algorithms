@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="DesignPatterns\AbstractFactory.cs" />
     <Compile Include="DesignPatterns\Decorator.cs" />
+    <Compile Include="DesignPatterns\FactoryMethod.cs" />
     <Compile Include="DesignPatterns\Observer.cs" />
     <Compile Include="DivideAndConquer.cs" />
     <Compile Include="HeapSort.cs" />

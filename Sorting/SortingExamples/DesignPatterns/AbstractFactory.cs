@@ -21,49 +21,69 @@ namespace DesignPatterns {
         public Room(Int32 roomNo) {
             roomNumber = roomNo;
         }
+
         public MapSite GetSide(Direction direction) {
             return null;
         }
+
         public void SetSide(Direction direction, MapSite mapSite) {
-
         }
-        public override void Enter() {
 
+        public override void Enter() {
         }
     }
 
+    internal class EnchantedRoom : Room {
+        public EnchantedRoom(Int32 n, Spell spell)
+            : base(n) {
+        }
+    }
+
+    internal class RoomWithABomb : Room {
+        public RoomWithABomb(Int32 n)
+            : base(n) {
+        }
+    }
+
+
     internal class Wall : MapSite {
         public Wall() {
-
         }
 
         public override void Enter() {
-
         }
+    }
+
+    internal class BombedWall : Wall {
     }
 
     internal class Door : MapSite {
         public Door(Room room1 = null, Room room2 = null) {
-
         }
+
         public override void Enter() {
-
         }
+
         public Room OtherSideFrom(Room room) {
             return null;
         }
+
         private Room room1;
         private Room room2;
         private Boolean isOpen;
     }
 
+    internal class DoorNeedingSpell : Door {
+        public DoorNeedingSpell(Room r1, Room r2)
+            : base(r1, r2) {
+        }
+    }
+
     internal class Maze {
         public Maze() {
-
         }
 
         public void AddRoom(Room room) {
-
         }
 
         public Room RoomNo(Int32 roomNo) {
@@ -133,6 +153,15 @@ namespace DesignPatterns {
         }
     }
 
+    internal class BombedMazeFactory : MazeFactory {
+        public override Wall MakeWall() {
+            return new BombedWall();
+        }
+        public override Room MakeRoom(Int32 n) {
+            return new RoomWithABomb(n);
+        }
+    }
+
     internal class EnchantedMazeFactory : MazeFactory {
         public override Room MakeRoom(Int32 n) {
             return new EnchantedRoom(n, CastSpell());
@@ -145,38 +174,7 @@ namespace DesignPatterns {
         }
     }
 
-    internal class EnchantedRoom : Room {
-        public EnchantedRoom(Int32 n, Spell spell) : base(n) {
-        }
-    }
-
     internal class Spell {
-
-    }
-
-    internal class DoorNeedingSpell : Door {
-        public DoorNeedingSpell(Room r, Room q) : base(r, q) {
-
-        }
-    }
-
-    internal class BombedWall : Wall {
-
-    }
-
-    internal class RoomWithABomb : Room {
-        public RoomWithABomb(Int32 n) : base(n) {
-
-        }
-    }
-
-    internal class BombedMazeFactory : MazeFactory {
-        public override Wall MakeWall() {
-            return new BombedWall();
-        }
-        public override Room MakeRoom(Int32 n) {
-            return new RoomWithABomb(n);
-        }
     }
 
     internal static class AbstractFactoryDemo {

@@ -3,21 +3,22 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 
-public class SuffixAutomaton {
-    private class State {
-        public Int32 len, link;
-        public SortedDictionary<Char, Int32> next = new SortedDictionary<Char, Int32>();
-    }
-    public Int32 N { get; set; } // число входных строк
+public class State {
+    public Int32 len;
+    public Int32 link;
+    public SortedDictionary<Char, Int32> next = new SortedDictionary<Char, Int32>();
+}
+
+public class ColoredState : State {
+    public Byte color;
+}
+
+public class SuffixAutomaton<T> where T : State, new() {
     public Int32 Size { get; set; }
     public Int32 Last { get; set; }
-    private List<State> st = new List<State>();
-    public Char[] delim { get; set; }
-    private Boolean IsAchievableFlag = false;
-    private Byte[] colorAttr = null;
-    private StringBuilder answer = new StringBuilder();
+    protected List<T> st = new List<T>();
     public SuffixAutomaton() {
-        st.Add(new State());
+        st.Add(new T());
         Size = 1;
         Last = 0;
         st[0].len = 0;
@@ -25,7 +26,7 @@ public class SuffixAutomaton {
     }
     public void Extend(Char c) {
         Int32 cur = Size++;
-        st.Add(new State());
+        st.Add(new T());
         st[cur].len = st[Last].len + 1;
         Int32 p;
         for (p = Last; p != -1 && !st[p].next.ContainsKey(c); p = st[p].link) {
@@ -39,7 +40,7 @@ public class SuffixAutomaton {
                 st[cur].link = q;
             } else {
                 Int32 clone = Size++;
-                st.Add(new State());
+                st.Add(new T());
                 st[clone].len = st[p].len + 1;
                 st[clone].next = new SortedDictionary<char, int>(st[q].next);
                 st[clone].link = st[q].link;
@@ -51,26 +52,32 @@ public class SuffixAutomaton {
         }
         Last = cur;
     }
-    public void Print() {
-        for (Int32 i = 0; i < Size; i++) {
-            Console.WriteLine("\nСостояние : {0}\nlen = {1}\nlink = {2}\nNext:", i, st[i].len, st[i].link);
-            foreach (var item in st[i].next) {
-                Console.WriteLine("{0} --> {1}", item.Key, item.Value);
-            }
-        }
+}
+
+public interface ISolver<in T, out TResult> {
+    TResult Solve(T obj);
+}
+
+public class MaxCommonSubstrSolver : SuffixAutomaton<ColoredState>, ISolver<Object, String> {
+    public Int32 N { get; set; } // число входных строк
+    public Char[] delim { get; set; }
+    private Boolean IsAchievableFlag = false;
+    private StringBuilder answer = new StringBuilder();
+    public String Solve(Object obj) {
+        InitializeFromConsole();
+        return MaxCommonSubstring();
     }
     private void InitColorAttr() {
-        colorAttr = new Byte[Size];
+        foreach (var state in st) {
+            state.color = 0;
+        }
     }
     public void IsAchievableAux(Int32 node, Char d, Char[] other) {
-        // Инициализация:
-        colorAttr[node] = 1;
+        st[node].color = 1; // Инициализация 
         Queue<Int32> queue = new Queue<Int32>();
         queue.Enqueue(node);
-        // Обход графа в ширину:
-        while (queue.Count != 0) {
-            // Выталкивается текущее серое состояние из начала очереди:
-            Int32 u = queue.Dequeue();
+        while (queue.Count != 0) { // Обход графа в ширину
+            Int32 u = queue.Dequeue(); // Выталкивается текущее серое состояние из начала очереди:
             // Проверяется, есть ли из него переход по нужному разделителю. Если да, то устанавливаем флаг в тру и прекращаем поиски.
             if (st[u].next.ContainsKey(d)) {
                 IsAchievableFlag = true;
@@ -81,13 +88,13 @@ public class SuffixAutomaton {
                 // Если переход происходит не по метке с неподходящим разделителем, то добавляем состояние в очередь.
                 if (!other.Contains(transition.Key)) {
                     Int32 v = transition.Value;
-                    if (colorAttr[v] == 0) {
-                        colorAttr[v] = 1;
+                    if (st[v].color == 0) {
+                        st[v].color = 1;
                         queue.Enqueue(v);
                     }
                 }
             }
-            colorAttr[u] = 2;
+            st[u].color = 2;
         }
     }
     public Boolean IsAchievable(Int32 node, Char d, Char[] other) {
@@ -161,8 +168,7 @@ public class SuffixAutomaton {
 
 class Program {
     static void Main(String[] args) {
-        SuffixAutomaton sa = new SuffixAutomaton();
-        sa.InitializeFromConsole();
-        Console.WriteLine(sa.MaxCommonSubstring());
+        ISolver<Object, String> maxCommonSubstrSolver = new MaxCommonSubstrSolver();
+        Console.WriteLine(maxCommonSubstrSolver.Solve(null));
     }
 }

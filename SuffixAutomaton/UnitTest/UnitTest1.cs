@@ -19,7 +19,7 @@ namespace UnitTest {
         [TestMethod]
         public void IsAllAchievableTest1() {
             SuffixAutomaton sa = new SuffixAutomaton();
-            String s = "abc0bca1bbc2"; 
+            String s = "abc0bca1bbc2";
             for (int i = 0; i < s.Length; i++) {
                 sa.Extend(s[i]);
             }
@@ -92,7 +92,7 @@ namespace UnitTest {
             }
             Assert.AreEqual(true, sa.IsAchievable(10, '0', new Char[] { '1', '2' }));
             Assert.AreEqual(true, sa.IsAchievable(10, '1', new Char[] { '0', '2' }));
-//            Assert.AreEqual(true, sa.IsAchievable(10, '2', new Char[] { '0', '1' }));
+            //            Assert.AreEqual(true, sa.IsAchievable(10, '2', new Char[] { '0', '1' }));
         }
     }
 }
