@@ -1,33 +1,35 @@
 ﻿using System;
 
 namespace DataStructures {
-    public class Stack<T> {
-        private Int32 top;
-        private T[] array;
-        private Int32 maxSize = 100;
-        public Stack() {
-            InternalArrayInitializer();
+    public class Stack<T> : ArrayBasedStructure<T> {
+        private Int32 top; // Индекс элемента на вершине стека. -1, если стек пуст.
+        public Stack() : base() {
+            Initialize();
         }
-        public Stack(Int32 size) {
-            if (size > 0) {
-                maxSize = size;
-                InternalArrayInitializer();
-            } else {
-                throw new ArgumentOutOfRangeException("size", 
-                    "size argument must be integer that is greater than zero."
-                    );
-            }           
+        public Stack(Int32 size) : base(size) {
+            Initialize();
         }
-        private void InternalArrayInitializer() {
-            array = new T[maxSize];
+        private void Initialize() {
+            top = -1;
         }
         public Boolean IsEmpty {
             get {
-                if (top == 0) {
+                if (top == -1) {
                     return true;
                 }
                 return false;
             }
+        }
+        public void Push(T obj) {
+            if (top + 1 < maxSize) {
+                array[++top] = obj;
+            }
+        }
+        public T Pop() {
+            if (IsEmpty) {
+                throw new Exception("You cant pop from empty stack");
+            }
+            return array[--top + 1];
         }
     }
 }
