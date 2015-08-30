@@ -1,12 +1,9 @@
 ﻿using System;
 
 namespace DataStructures {
-    abstract class ArrayBasedStructure<T> {
+    public abstract class ArrayBasedStructure<T> {
         protected T[] array;
-        protected Int32 maxSize = 100;
-        protected ArrayBasedStructure() {
-            InternalArrayInitializer();
-        }
+        protected Int32 maxSize;
         protected ArrayBasedStructure(Int32 size) {
             if (size > 0) {
                 maxSize = size;

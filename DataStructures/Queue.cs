@@ -4,10 +4,7 @@ namespace DataStructures {
     public class Queue<T> : ArrayBasedStructure<T> {
         private Int32 head; // Голова очереди - откуда убирается элемент
         private Int32 tail; // Хвост - куда добавляется новый элемент
-        public Queue() : base() {
-            Initialize();
-        }
-        public Queue(Int32 size) : base(size) {
+        public Queue(Int32 size = 100) : base(size) {
             Initialize();
         }
         private void Initialize() {

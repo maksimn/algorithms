@@ -3,10 +3,7 @@
 namespace DataStructures {
     public class Stack<T> : ArrayBasedStructure<T> {
         private Int32 top; // Индекс элемента на вершине стека. -1, если стек пуст.
-        public Stack() : base() {
-            Initialize();
-        }
-        public Stack(Int32 size) : base(size) {
+        public Stack(Int32 size = 100) : base(size) {
             Initialize();
         }
         private void Initialize() {
